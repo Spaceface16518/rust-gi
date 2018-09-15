@@ -7,14 +7,11 @@ use std::io::{stdout, Write};
 const PREFIX: &str = "https://www.gitignore.io/api/";
 
 fn main() {
-    println!("processing arguments...");
     let argv: Vec<String> = proc_args(args());
     let a_str: String = format(PREFIX, argv);
-    println!("generating curl client...");
     let mut easy = Easy::new();
     easy.url(a_str.as_str()).unwrap();
     easy.write_function(write_fn).unwrap();
-    println!("performing curl operation...");
     easy.perform().unwrap();
 }
 
