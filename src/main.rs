@@ -2,7 +2,6 @@ extern crate curl;
 
 use curl::easy::Easy;
 use std::env::{args, Args};
-use std::io::Error;
 use std::io::{stdout, Write};
 
 const PREFIX: &str = "https://www.gitignore.io/api/";
