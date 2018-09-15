@@ -1,8 +1,8 @@
 extern crate curl;
 
-use curl::easy::Easy;
+use curl::easy::{Easy, WriteError};
 use std::env::{args, Args};
-use std::io::{stdout, Write};
+use std::io::{stdout, Error, Write};
 
 const PREFIX: &str = "https://www.gitignore.io/api/";
 
@@ -11,8 +11,7 @@ fn main() {
     let a_str: String = format(PREFIX, argv);
     let mut easy = Easy::new();
     easy.url(a_str.as_str()).unwrap();
-    easy.write_function(|data: &[u8]| Ok(stdout().write(data).unwrap()))
-        .unwrap();
+    easy.write_function(write_fn).unwrap();
     easy.perform().unwrap();
 }
 
@@ -24,4 +23,8 @@ fn proc_args(argv: Args) -> Vec<String> {
 
 fn format(prefix: &str, args: Vec<String>) -> String {
     format!("{}{}", prefix, args.join(","))
+}
+
+fn write_fn(data: &[u8]) -> Result<usize, WriteError> {
+    Ok(stdout().write(data).unwrap())
 }
