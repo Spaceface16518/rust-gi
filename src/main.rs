@@ -9,5 +9,7 @@ use curl::easy::Easy;
 const PREFIX: &str = "https://www.gitignore.io/api/";
 
 fn main() {
-    println!("Hello, world!");
+    let mut args: Vec<String> = args().collect();
+    args.remove(0);
+    let a_str: String = format!("{}{}", PREFIX, args.join(","));
 }
