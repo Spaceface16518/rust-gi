@@ -51,9 +51,7 @@ impl Cache {
         Cache {}
     }
 
-    // TODO: find a way to return `&[u8]` instead of `Vec<u8>`
-    // Result necessary here?
-    pub fn index(&self) -> Result<Vec<u64>> {
+    pub fn index(&self) -> Result<&[u64]> {
         let mut sto: Vec<u64> = Vec::new();
         for entry in self.get_cache().unwrap() {
             let mut hasher = DefaultHasher::new();
@@ -68,7 +66,7 @@ impl Cache {
                 });
             sto.push(hasher.finish());
         }
-        Ok(sto)
+        Ok(&sto[..]) // Returning `Result` necessary here?
     }
 
     pub fn get_cache(&self) -> Result<ReadDir> {
