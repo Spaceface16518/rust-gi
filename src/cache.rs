@@ -6,7 +6,7 @@ use std::ffi::OsString;
 pub const CACHE_NAME: &str = ".gi_cache";
 pub const MAX_CACHE_SIZE: usize = 5;
 
-pub fn init(path: &Path) -> Result<File, Error> {
+pub fn init(path: &Path) -> Result<()> {
     if !path.is_dir() {
         Ok(i_init(path.parent().unwrap())) // Take parent instead of excepting?
     } else {
@@ -14,8 +14,8 @@ pub fn init(path: &Path) -> Result<File, Error> {
     }
 }
 
-fn i_init(path: &Path) -> File {
-    File::create(path.join(Path::new(CACHE_NAME)).as_path()).unwrap()
+fn i_init(path: &Path) {
+    create_dir(path).unwrap()
 }
 
 pub fn check(path: &Path) -> Option<Vec<DirEntry>> {
