@@ -76,7 +76,7 @@ impl Cache {
     }
 
     pub fn size(&self) -> Result<usize> {
-        // Currently unsafe because of cache contamination
+        // Inaccurate because of cache contamination
         Ok(self.get_cache().unwrap().count())
     }
 
@@ -104,7 +104,7 @@ impl Cache {
 
     pub fn push(&self, name: &String, contents: &[u8]) -> Result<&Cache> {
         let path = PathBuf::from(self.as_path()).push(name);
-
+        self.raw_add(name, contents).unwrap();
         Ok(self)
     }
 
@@ -123,7 +123,7 @@ impl Cache {
         Path::new(&self.inner)
     }
 
-    fn raw_add(&self, name: String, file_contents: &[u8]) -> Result<()> {
+    fn raw_add(&self, name: &String, file_contents: &[u8]) -> Result<()> {
         let mut path = PathBuf::from(self.as_path());
         path.push(name);
         write(path, file_contents)
