@@ -18,22 +18,23 @@ fn i_init(path: &Path) {
     create_dir(path).unwrap()
 }
 
-pub fn check(path: &Path) -> Option<Vec<DirEntry>> {
-    if !path.is_dir() {
-        Some(i_check(path.parent().unwrap()))
-    } else {
-        let f = i_check(path);
-        if f.is_empty() {
-            None
-        } else {
-            Some(f)
-        }
-    }
+pub fn preexists(path: &Path) -> bool {
+    i_check(path)
 }
 
-fn i_check(path: &Path) -> Vec<DirEntry> {
-let mut found: Vec<DirEntry> = Vec::new();
-        for entry in path.read_dir().unwrap() {
+fn i_check(path: &Path) -> bool {
+    for entry in path.read_dir().unwrap() {
+        let entry: DirEntry = entry.unwrap();
+        if entry.metadata().unwrap().is_dir() {
+            if entry.file_name() == OsString::from(CACHE_NAME) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+}
+
             let entry = entry.unwrap();
             if entry.file_name() == OsString::from(CACHE_NAME) {
                 found.push(entry);
