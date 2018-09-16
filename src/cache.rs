@@ -4,6 +4,7 @@ use std::path::Path;
 use std::ffi::OsString;
 
 pub const CACHE_NAME: &str = ".gi_cache";
+pub const MAX_CACHE_SIZE: usize = 5;
 
 pub fn init(path: &Path) -> Result<File, Error> {
     if !path.is_dir() {
