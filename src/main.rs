@@ -4,7 +4,7 @@ use curl::easy::{Easy, WriteError};
 use std::env::{args, Args};
 use std::io::{stdout, Write};
 
-mod cache;
+// mod cache;
 
 const PREFIX: &str = "https://www.gitignore.io/api/";
 
