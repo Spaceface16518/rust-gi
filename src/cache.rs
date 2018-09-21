@@ -9,18 +9,6 @@ pub const CACHE_NAME: &str = ".gi_cache";
 pub const MAX_CACHE_SIZE: usize = 5;
 pub const CACHE_ENTRY_SUFFIX: &str = ".gitignore";
 
-pub fn init(path: &Path) -> Result<()> {
-    if !path.is_dir() {
-        Ok(i_init(path.parent().unwrap())) // Take parent instead of excepting?
-    } else {
-        Ok(i_init(path))
-    }
-}
-
-fn i_init(path: &Path) {
-    create_dir(path).unwrap()
-}
-
 pub fn preexists(path: &Path) -> bool {
     i_check(path)
 }
@@ -37,21 +25,19 @@ fn i_check(path: &Path) -> bool {
     return false;
 }
 
-pub struct Cache {
-    inner: OsStr,
+pub struct Cache<'a> {
+    inner: &'a OsStr,
 }
 
-impl Cache {
-    pub fn new<S>(path: &S) -> &Cache
+impl<'a> Cache<'a> {
+    pub fn new<S>(path: &S) -> &'a Cache
     where
         S: AsRef<OsStr> + ?Sized,
     {
-        // unsafe { &*(path.as_ref() as *const OsStr as *const Cache) } // Borrowed from `Path`, don't know what it does
-
-        Cache {}
+        unsafe { &*(path.as_ref() as *const OsStr as *const Cache) } // Borrowed from `Path`, don't know what it does
     }
 
-    pub fn index(&self) -> Result<&[u64]> {
+    pub fn index(&self) -> Result<&Vec<u64>> {
         let mut sto: Vec<u64> = Vec::new();
         for entry in self.get_cache().unwrap() {
             let mut hasher = DefaultHasher::new();
@@ -66,7 +52,7 @@ impl Cache {
                 });
             sto.push(hasher.finish());
         }
-        Ok(&sto[..]) // Returning `Result` necessary here?
+        Ok(&sto) // Returning `Result` necessary here?
     }
 
     pub fn get_cache(&self) -> Result<ReadDir> {
@@ -78,14 +64,18 @@ impl Cache {
         Ok(self.get_cache().unwrap().count())
     }
 
+    /// Checks the cache size while accounting for cache contamination.
+    /// Does not santize cache, though
     pub fn safe_size(&self) -> Result<usize> {
         Ok(self
             .get_cache()
             .unwrap()
+            // BUG: [E0507] cannot move out of borrowed content
             .filter(|entry| entry.unwrap().path().extension().unwrap() == CACHE_ENTRY_SUFFIX)
             .count())
     }
 
+    /// Santizes cache, then checks the size
     pub fn san_size(&self) -> Result<usize> {
         Ok(self.sanitize().unwrap().get_cache().unwrap().count())
     }
@@ -114,7 +104,8 @@ impl Cache {
     }
 
     fn raw_remove(&self, name: String) -> Result<()> {
-        remove_dir(self.as_path())
+        remove_dir(self.as_path()) // Woah there don't do that
+                                   // FIXME: um that's not what this is supposed to do XD
     }
 
     pub fn as_path(&self) -> &Path {
@@ -122,8 +113,10 @@ impl Cache {
     }
 
     fn raw_add(&self, name: &String, file_contents: &[u8]) -> Result<()> {
+        // TODO: make sure this is recursive, that will get ride of needing to initialize directory
         let mut path = PathBuf::from(self.as_path());
         path.push(name);
+        path.canonicalize();
         write(path, file_contents)
     }
 }
