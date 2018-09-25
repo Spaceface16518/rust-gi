@@ -1,9 +1,12 @@
 extern crate clap;
 
-use self::clap::{App, Arg, SubCommand, ArgMatches};
+use self::clap::{App, Arg, ArgMatches, SubCommand};
 
 const long_desc: &str =
-"This is a command line app to generate gitignores. You can use it easily right along with command line git with the `gi` command. It uses the public API to generate gitignores, and therefore requires internet connection. Requests can sometimes be cached for offline usage.";
+"This is a command line app to generate gitignores. You can use it easily right
+ along with command line git with the `gi` command. It uses the public API to 
+ generate gitignores, and therefore requires internet connection. Requests can 
+ sometimes be cached for offline usage.";
 
 pub fn n_app<'a, 'b>() -> App<'a, 'b> {
     App::new(env!("CARGO_PKG_NAME"))
