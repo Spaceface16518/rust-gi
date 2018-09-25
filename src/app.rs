@@ -8,7 +8,7 @@ const long_desc: &str =
  generate gitignores, and therefore requires internet connection. Requests can 
  sometimes be cached for offline usage.";
 
-pub fn n_app<'a, 'b>() -> App<'a, 'b> {
+pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     App::new(env!("CARGO_PKG_NAME"))
     .author(env!("CARGO_PKG_AUTHORS"))
     .version(env!("CARGO_PKG_VERSION"))
