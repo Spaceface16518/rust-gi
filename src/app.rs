@@ -11,7 +11,7 @@ pub fn n_app<'a, 'b>() -> App<'a, 'b> {
     .version(env!("CARGO_PKG_VERSION"))
     .about("A command line app to generate gitignores")
     .long_about(long_desc)
-    
+
     // Update
     // .arg(Arg::with_name("update")
     // .takes_value(false)
@@ -34,4 +34,12 @@ pub fn n_app<'a, 'b>() -> App<'a, 'b> {
     .takes_value(true)
     .min_values(1)
     .use_delimiter(true))
+
+    // Install
+    .arg(Arg::with_name("install")
+    .long("install")
+    .short("l")
+    .help("Globally installs (or reinstalls) this binary as a global binary.")
+    .required(false)
+    .takes_value(false))
 }
