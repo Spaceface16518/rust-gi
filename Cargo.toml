@@ -2,6 +2,8 @@
 name = "gi"
 version = "1.0.0"
 authors = ["Spaceface16518 <33424649+Spaceface16518@users.noreply.github.com>"]
+description = "A command line tool to generate gitignores."
 
 [dependencies]
 curl = "0.4.14"
+clap = "2.32.0"
