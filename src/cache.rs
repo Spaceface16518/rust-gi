@@ -8,6 +8,7 @@ use std::path::{Path, PathBuf};
 pub const CACHE_NAME: &str = ".gi_cache";
 pub const MAX_CACHE_SIZE: usize = 5;
 pub const CACHE_ENTRY_SUFFIX: &str = ".gitignore";
+pub const DEFAULT_CACHE_PATH: &str = "~/";
 
 pub fn preexists(path: &Path) -> bool {
     i_check(path)
