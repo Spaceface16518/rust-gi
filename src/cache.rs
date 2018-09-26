@@ -67,12 +67,16 @@ impl<'a> Cache<'a> {
     /// Checks the cache size while accounting for cache contamination.
     /// Does not santize cache, though
     pub fn safe_size(&self) -> Result<usize> {
-        Ok(self
-            .get_cache()
-            .unwrap()
-            // BUG: [E0507] cannot move out of borrowed content
-            .filter(|entry| entry.unwrap().path().extension().unwrap() == CACHE_ENTRY_SUFFIX)
-            .count())
+        Ok({
+            let mut count = 0;
+            for entry in self.get_cache().unwrap() {
+                if entry.unwrap().path().extension().unwrap() == CACHE_ENTRY_SUFFIX {
+                    count += 1;
+                }
+            }
+            count
+        }
+        )
     }
 
     /// Santizes cache, then checks the size
