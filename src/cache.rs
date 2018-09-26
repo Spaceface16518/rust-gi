@@ -37,7 +37,7 @@ impl<'a> Cache<'a> {
         unsafe { &*(path.as_ref() as *const OsStr as *const Cache) } // Borrowed from `Path`, don't know what it does
     }
 
-    pub fn index(&self) -> Result<&Vec<u64>> {
+    pub fn index(&self) -> Result<Vec<u64>> {
         let mut sto: Vec<u64> = Vec::new();
         for entry in self.get_cache().unwrap() {
             let mut hasher = DefaultHasher::new();
@@ -52,7 +52,7 @@ impl<'a> Cache<'a> {
                 });
             sto.push(hasher.finish());
         }
-        Ok(&sto) // Returning `Result` necessary here?
+        Ok(sto) // Returning `Result` necessary here?
     }
 
     pub fn get_cache(&self) -> Result<ReadDir> {
