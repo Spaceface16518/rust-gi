@@ -1,9 +1,14 @@
 extern crate clap;
 
 use self::clap::{App, Arg, ArgMatches, SubCommand};
+use std::env;
+use std::ffi::{OsStr, OsString};
+use std::fs::{File, OpenOptions};
+use std::io::{self, prelude::*, Error};
+use std::path::{Path, PathBuf};
 
 const long_desc: &str =
-"This is a command line app to generate gitignores. You can use it easily right
+    "This is a command line app to generate gitignores. You can use it easily right
  along with command line git with the `gi` command. It uses the public API to 
  generate gitignores, and therefore requires internet connection. Requests can 
  sometimes be cached for offline usage.";
@@ -39,10 +44,59 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     .use_delimiter(true))
 
     // Install
-    .arg(Arg::with_name("install")
-    .long("install")
-    .short("l")
-    .help("Globally installs (or reinstalls) this binary as a global binary.")
-    .required(false)
-    .takes_value(false))
+    .subcommand(SubCommand::with_name("install")
+    .arg(Arg::with_name("PROFILE")
+    .required(true)
+    .index(1)))
+}
+
+pub fn install(profile: &Path) -> Result<(), Error> {
+    let var_text = PathBuf::from(env::current_dir().expect("Unable to get current directory from environment"));
+
+    add_PATH_var(profile, OsString::from(var_text.as_os_str()))
+}
+
+fn add_PATH_var(target: &Path, path: OsString) -> Result<(), Error> {
+    i_add_PATH_var(target, format_path(&Path::new(&path))
+}
+
+fn a_open(path: &Path) -> io::Result<File> {
+    OpenOptions::new().write(true).append(true).open(path)
+}
+
+fn append_to_file(path: &Path, data: &[u8]) -> io::Result<()> {
+    let mut file = a_open(path).unwrap();
+    file.write_all(data).expect("Unable to write to file");
+    Ok(())
+}
+
+#[cfg(target_os = "windows")]
+fn i_add_PATH_var(target: &Path, var_text: OsString) -> Result<(), Error> {
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn i_add_PATH_var(target: &Path, var_text: OsString) -> Result<(), Error> {
+    Ok(())
+}
+
+#[cfg(not(any(target_os = "windows", target_os = "macos")))]
+fn i_add_PATH_var(target: &Path, var_text: OsString) -> Result<(), Error> {
+    Ok(())
+}
+
+#[cfg(not(target_os = "windows"))]
+fn format_path(dir_path: &Path) -> OsString {
+    OsString::from(format!(
+        "export PATH=\"{}:$PATH\"",
+        dir_path.to_str().unwrap()
+    ))
+}
+
+#[cfg(target_os = "windows")]
+fn format_path(dir_path: &Path) -> OsString {
+    OsString::from(format!(
+        "set PATH=\"{};%PATH%\"",
+        dir_path.to_str().unwrap()
+    ))
 }
