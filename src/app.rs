@@ -57,7 +57,7 @@ pub fn install(profile: &Path) -> Result<(), Error> {
 }
 
 fn add_PATH_var(target: &Path, path: OsString) -> Result<(), Error> {
-    i_add_PATH_var(target, format_path(&Path::new(&path))
+    i_add_PATH_var(target, format_path(&Path::new(&path)))
 }
 
 fn a_open(path: &Path) -> io::Result<File> {
@@ -65,7 +65,7 @@ fn a_open(path: &Path) -> io::Result<File> {
 }
 
 fn append_to_file(path: &Path, data: &[u8]) -> io::Result<()> {
-    let mut file = a_open(path).unwrap();
+    let mut file = a_open(path).expect("Unable to open file (in append mode)");
     file.write_all(data).expect("Unable to write to file");
     Ok(())
 }
