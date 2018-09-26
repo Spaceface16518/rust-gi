@@ -24,7 +24,7 @@ fn proc_args(argv: Args) -> Vec<String> {
 }
 
 fn format(prefix: &str, args: Vec<String>) -> String {
-    format!("{}{}", prefix, args.join(","))
+    format!("{}{}\n", prefix, args.join(","))
 }
 
 fn write_fn(data: &[u8]) -> Result<usize, WriteError> {
