@@ -45,9 +45,32 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
 
     // Install
     .subcommand(SubCommand::with_name("install")
-    .arg(Arg::with_name("PROFILE")
-    .required(true)
-    .index(1)))
+
+    // Install::Symdir
+    .arg(Arg::with_name("symdir")
+    .long("symdir")
+    .short("s")
+    .required(false)
+    .takes_value(true)
+    .min_values(1)
+    .help("Choose a symbolic install directories. A symlink will be created there; PATH can then be linked to the symlink instead of this executable"))
+
+    // Instal::Dir
+    .arg(Arg::with_name("dir")
+    .long("dir")
+    .short("d")
+    .help("Choose a directory in which to copy (install) this executable; PATH can then be linked to that executable")
+    .takes_value(true)
+    .required(false)
+    .number_of_values(1))
+
+    // Instal::Link
+    .arg(Arg::with_name("link")
+    .long("link")
+    .short("l")
+    .takes_value(false)
+    .required(false)
+    .help("Turns on automatic linking. The program will do its best to link the resulting executables, making them globally available. It may fail, however.")))
 }
 
 fn install(target_os: TargetOS) -> Option<io::Result<()>> {
