@@ -7,11 +7,8 @@ use std::fs::{File, OpenOptions};
 use std::io::{self, prelude::*, Error};
 use std::path::{Path, PathBuf};
 
-const long_desc: &str =
-    "This is a command line app to generate gitignores. You can use it easily right
- along with command line git with the `gi` command. It uses the public API to 
- generate gitignores, and therefore requires internet connection. Requests can 
- sometimes be cached for offline usage.";
+mod statics;
+use self::statics::*;
 
 pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     App::new(env!("CARGO_PKG_NAME"))
@@ -53,13 +50,13 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     .required(false)
     .takes_value(true)
     .min_values(1)
-    .help("Choose a symbolic install directories. A symlink will be created there; PATH can then be linked to the symlink instead of this executable. `gi` will not explicitly try to, though."))
+    .help(SYMDIR_HELP))
 
     // Instal::Dir
     .arg(Arg::with_name("dir")
     .long("dir")
     .short("d")
-    .help("Choose a directory in which to copy (install) this executable. `gi` will then try to link PATH to that executable instead of this one.")
+    .help(DIR_HELP)
     .takes_value(true)
     .required(false)
     .number_of_values(1))
@@ -70,17 +67,19 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     .short("nl")
     .takes_value(false)
     .required(false)
-    .help("Turns off automatic linking. `gi` will no longer try and link PATH to an executable"))
+    .help(NOLINK_HELP))
     
     // Install::No DirWrap
     .arg(Arg::with_name("nodirwrap")
     .long("nodirwrap")
     .short("nd")
-    .help("Turns off wrapping of executable in directories. `gi` would wrap the executable into a folder (`bin` or `gi/bin`) for safety, except when you link PATH to this executable")
+    .help(NODIRWRAP_HELP)
     ))
 }
 
-fn install(target_os: TargetOS) -> Option<io::Result<()>> {
+/// Install functionality, handles the program side of installation. Needs a 
+/// handler to be pretty for a user
+fn install() -> Option<io::Result<()>> {
     if cfg!(target_os = "windows") {
         return None;
     } else {
@@ -93,7 +92,7 @@ fn install(target_os: TargetOS) -> Option<io::Result<()>> {
 
 /// Higher level function, formats the path into the raw text and passes it on
 fn add_path_var(path: &Path) -> io::Result<()> {
-    i_add_PATH_var(&format_path(&Path::new(&path)))
+    i_add_path_var(&format_path(&Path::new(&path)))
 }
 
 /// Opens a file in append mode using `io::OpenOptions`
@@ -113,20 +112,15 @@ fn append_to_file(path: &Path, data: &OsString) -> io::Result<()> {
     Ok(())
 }
 
-enum TargetOS {
-    Win,
-    Mac,
-    Other,
-}
-
 /// Lower level function, asks helper function to append raw text to files.
-fn i_add_PATH_var(var_text: &OsString) -> Result<(), Error> {
-    append_to_file(Path::new("~/.bash_profile"), var_text).unwrap();
-    append_to_file(Path::new("~/.profile"), var_text).unwrap();
-    append_to_file(Path::new("~/.bashrc"), var_text).unwrap();
+fn i_add_path_var(var_text: &OsString) -> Result<(), Error> {
+    for &i in PROFILES.iter() {
+        append_to_file(Path::new(i), var_text).unwrap();
+    }
     Ok(())
 }
 
+/// Formats path for entry into profiles
 fn format_path(dir_path: &Path) -> OsString {
     OsString::from(format!(
         "export PATH=\"{}:$PATH\"",
