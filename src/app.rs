@@ -50,30 +50,37 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     .index(1)))
 }
 
-pub fn install(target_os: TargetOS) -> Result<(), Error> {
+fn install(target_os: TargetOS) -> Option<io::Result<()>> {
     if cfg!(target_os = "windows") {
-        return win_install();
-    }
-    let var_text = PathBuf::from(
-        env::current_dir().expect("Unable to get current directory from environment"),
-    );
+        return None;
+    } else {
+        let var_text = PathBuf::from(
+            env::current_dir().expect("Unable to get current directory from environment"),
+        );
 
-    add_path_var(profile, OsString::from(var_text.as_os_str()))
+        Some(add_path_var(&var_text.as_path()))
+    }
 }
 
-fn win_install() -> Result<(), Error> {}
-fn add_path_var(target: &Path, path: OsString) -> io::Result<()> {
+/// Higher level function, formats the path into the raw text and passes it on
+fn add_path_var(path: &Path) -> io::Result<()> {
     i_add_PATH_var(&format_path(&Path::new(&path)))
 }
 
+/// Opens a file in append mode using `io::OpenOptions`
 fn a_open(path: &Path) -> io::Result<File> {
     OpenOptions::new().write(true).append(true).open(path)
 }
 
+/// Appends an `OsString` to a file specified by `path`.
 fn append_to_file(path: &Path, data: &OsString) -> io::Result<()> {
     let mut file = a_open(path).expect("Unable to open file (in append mode)");
-    file.write_all(&data.to_str().unwrap().as_bytes())
-        .expect("Unable to write to file");
+    file.write_all(
+        &data
+            .to_str()
+            .expect("Could not convert data to a `&str`")
+            .as_bytes(),
+    ).expect("Unable to write to file");
     Ok(())
 }
 
@@ -83,6 +90,7 @@ enum TargetOS {
     Other,
 }
 
+/// Lower level function, asks helper function to append raw text to files.
 fn i_add_PATH_var(var_text: &OsString) -> Result<(), Error> {
     append_to_file(Path::new("~/.bash_profile"), var_text).unwrap();
     append_to_file(Path::new("~/.profile"), var_text).unwrap();
@@ -90,18 +98,9 @@ fn i_add_PATH_var(var_text: &OsString) -> Result<(), Error> {
     Ok(())
 }
 
-#[cfg(not(target_os = "windows"))]
 fn format_path(dir_path: &Path) -> OsString {
     OsString::from(format!(
         "export PATH=\"{}:$PATH\"",
-        dir_path.to_str().unwrap()
-    ))
-}
-
-#[cfg(target_os = "windows")]
-fn format_path(dir_path: &Path) -> OsString {
-    OsString::from(format!(
-        "set PATH=\"{};%PATH%\"",
         dir_path.to_str().unwrap()
     ))
 }
