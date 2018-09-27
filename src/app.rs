@@ -53,7 +53,7 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     .required(false)
     .takes_value(true)
     .min_values(1)
-    .help("Choose a symbolic install directories. A symlink will be created there; PATH can then be linked to the symlink instead of this executable"))
+    .help("Choose a symbolic install directories. A symlink will be created there; PATH can then be linked to the symlink instead of this executable. `gi` will not explicitly try to, though."))
 
     // Instal::Dir
     .arg(Arg::with_name("dir")
@@ -76,7 +76,7 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     .arg(Arg::with_name("nodirwrap")
     .long("nodirwrap")
     .short("nd")
-    .help("Turns off wrapping of executable in directories. Besides linking this executable, `gi` would wrap the executable into `gi/bin/gi` for safety.")
+    .help("Turns off wrapping of executable in directories. `gi` would wrap the executable into a folder (`bin` or `gi/bin`) for safety, except when you link PATH to this executable")
     ))
 }
 
