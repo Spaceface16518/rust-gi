@@ -64,7 +64,7 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     .required(false)
     .number_of_values(1))
 
-    // Instal::Link
+    // Install::Link
     .arg(Arg::with_name("link")
     .long("link")
     .short("l")
