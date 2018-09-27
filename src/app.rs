@@ -59,29 +59,35 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     .arg(Arg::with_name("dir")
     .long("dir")
     .short("d")
-    .help("Choose a directory in which to copy (install) this executable; PATH can then be linked to that executable")
+    .help("Choose a directory in which to copy (install) this executable. `gi` will then try to link PATH to that executable instead of this one.")
     .takes_value(true)
     .required(false)
     .number_of_values(1))
 
-    // Install::Link
-    .arg(Arg::with_name("link")
-    .long("link")
-    .short("l")
+    // Install::No Link
+    .arg(Arg::with_name("nolink")
+    .long("nolink")
+    .short("nl")
     .takes_value(false)
     .required(false)
-    .help("Turns on automatic linking. The program will do its best to link the resulting executables, making them globally available. It may fail, however.")))
+    .help("Turns off automatic linking. `gi` will no longer try and link PATH to an executable"))
+    
+    // Install::No DirWrap
+    .arg(Arg::with_name("nodirwrap")
+    .long("nodirwrap")
+    .short("nd")
+    .help("Turns off wrapping of executable in directories. Besides linking this executable, `gi` would wrap the executable into `gi/bin/gi` for safety.")
+    ))
 }
 
 fn install(target_os: TargetOS) -> Option<io::Result<()>> {
     if cfg!(target_os = "windows") {
         return None;
     } else {
-        let var_text = PathBuf::from(
+        let var_text: PathBuf = PathBuf::from(
             env::current_dir().expect("Unable to get current directory from environment"),
         );
-
-        Some(add_path_var(&var_text.as_path()))
+        Some(add_path_var(var_text.as_path()))
     }
 }
 
