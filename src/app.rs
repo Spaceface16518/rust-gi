@@ -1,8 +1,8 @@
 extern crate clap;
 
-use self::clap::{App, Arg, ArgMatches, SubCommand};
+use self::clap::{App, Arg, SubCommand};
 use std::env;
-use std::ffi::{OsStr, OsString};
+use std::ffi::OsString;
 use std::fs::{File, OpenOptions};
 use std::io::{self, prelude::*, Error};
 use std::path::{Path, PathBuf};
@@ -50,38 +50,43 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     .index(1)))
 }
 
-pub fn install(profile: &Path) -> Result<(), Error> {
-    let var_text = PathBuf::from(env::current_dir().expect("Unable to get current directory from environment"));
+pub fn install(target_os: TargetOS) -> Result<(), Error> {
+    if cfg!(target_os = "windows") {
+        return win_install();
+    }
+    let var_text = PathBuf::from(
+        env::current_dir().expect("Unable to get current directory from environment"),
+    );
 
-    add_PATH_var(profile, OsString::from(var_text.as_os_str()))
+    add_path_var(profile, OsString::from(var_text.as_os_str()))
 }
 
-fn add_PATH_var(target: &Path, path: OsString) -> Result<(), Error> {
-    i_add_PATH_var(target, format_path(&Path::new(&path)))
+fn win_install() -> Result<(), Error> {}
+fn add_path_var(target: &Path, path: OsString) -> io::Result<()> {
+    i_add_PATH_var(&format_path(&Path::new(&path)))
 }
 
 fn a_open(path: &Path) -> io::Result<File> {
     OpenOptions::new().write(true).append(true).open(path)
 }
 
-fn append_to_file(path: &Path, data: &[u8]) -> io::Result<()> {
+fn append_to_file(path: &Path, data: &OsString) -> io::Result<()> {
     let mut file = a_open(path).expect("Unable to open file (in append mode)");
-    file.write_all(data).expect("Unable to write to file");
+    file.write_all(&data.to_str().unwrap().as_bytes())
+        .expect("Unable to write to file");
     Ok(())
 }
 
-#[cfg(target_os = "windows")]
-fn i_add_PATH_var(target: &Path, var_text: OsString) -> Result<(), Error> {
-    Ok(())
+enum TargetOS {
+    Win,
+    Mac,
+    Other,
 }
 
-#[cfg(target_os = "macos")]
-fn i_add_PATH_var(target: &Path, var_text: OsString) -> Result<(), Error> {
-    Ok(())
-}
-
-#[cfg(not(any(target_os = "windows", target_os = "macos")))]
-fn i_add_PATH_var(target: &Path, var_text: OsString) -> Result<(), Error> {
+fn i_add_PATH_var(var_text: &OsString) -> Result<(), Error> {
+    append_to_file(Path::new("~/.bash_profile"), var_text).unwrap();
+    append_to_file(Path::new("~/.profile"), var_text).unwrap();
+    append_to_file(Path::new("~/.bashrc"), var_text).unwrap();
     Ok(())
 }
 
