@@ -8,7 +8,8 @@ pub const SYMDIR_HELP: &str = "Choose a symbolic install directories. A symlink 
 
 pub const DIR_HELP: &str = "Choose a directory in which to copy (install) this executable. `gi` will then try to link PATH to that executable instead of this one.";
 
-pub const NOLINK_HELP: &str = "Turns off automatic linking. `gi` will no longer try and link PATH to an executable";
+pub const NOLINK_HELP: &str =
+    "Turns off automatic linking. `gi` will no longer try and link PATH to an executable";
 
 pub const NODIRWRAP_HELP: &str = "Turns off wrapping of executable in directories. `gi` would wrap the executable into a folder (`bin` or `gi/bin`) for safety, except when you link PATH to this executable";
 
