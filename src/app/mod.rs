@@ -6,6 +6,8 @@ use std::ffi::OsString;
 use std::fs::{File, OpenOptions};
 use std::io::{self, prelude::*, Error};
 use std::path::{Path, PathBuf};
+use std::os::unix::fs::symlink;
+use std::os::windows::fs::symlink_file;
 
 mod statics;
 use self::statics::*;
@@ -76,6 +78,30 @@ pub fn default_app<'a, 'b>() -> App<'a, 'b> {
     .help(NODIRWRAP_HELP)
     ))
 }
+
+// Dir Wrap
+
+/// Outputs the executable to the place specified by options. Linking to PATH must ne handled externally.
+// pub fn output(dir: &Path, wrap: bool, symdir: Vec<&Path>) -> io::Result<()> {
+
+// }
+
+// fn out_syms(wrap: bool, symdir: Vec<&Path>) -> io::Result<()> {
+
+// }
+
+#[cfg(target_os = "windows")]
+fn i_out_syms(src: &Path, dst: &Path) -> io::Result<()> {
+    symlink_file(src.to_str().unwrap(), dst.to_str().unwrap())
+}
+
+#[cfg(not(target_os = "windows"))]
+fn i_out_syms(src: &Path, dst: &Path) -> io:: Result<()> {
+    symlink(src.to_str().unwrap(), dst.to_str().unwrap())
+}
+
+
+// Install
 
 /// Install functionality, handles the program side of installation. Needs a 
 /// handler to be pretty for a user
