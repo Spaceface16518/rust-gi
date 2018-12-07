@@ -1,13 +1,6 @@
 extern crate clap;
 
-use self::clap::{App, Arg, SubCommand};
-use std::{
-    env,
-    ffi::OsString,
-    fs::{File, OpenOptions},
-    io::{self, prelude::*, Error},
-    path::{Path, PathBuf},
-};
+use self::clap::{App, Arg};
 
 mod statics;
 use self::statics::*;
@@ -17,7 +10,7 @@ pub fn app<'a, 'b>() -> App<'a, 'b> {
         .author(env!("CARGO_PKG_AUTHORS"))
         .version(env!("CARGO_PKG_VERSION"))
         .about("A command line app to generate gitignores")
-        .long_about(long_desc)
+        .long_about(LONG_DESC)
         // Update //
         // .arg(Arg::with_name("update")
         // .takes_value(false)
@@ -26,7 +19,7 @@ pub fn app<'a, 'b>() -> App<'a, 'b> {
         // .help("Installs the latest version of `gi`. Only updates with
         // internet connection.")) Output
         .arg(
-            Arg::with_name("output")
+            Arg::with_name("OUTPUT")
                 .long("output")
                 .short("o")
                 .required(false)
@@ -38,7 +31,6 @@ pub fn app<'a, 'b>() -> App<'a, 'b> {
                 .required(true)
                 .index(1)
                 .min_values(1)
-                .multiple(true)
                 .help("The parameters for gitignore generation"),
         )
 }
