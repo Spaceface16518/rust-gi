@@ -7,8 +7,6 @@ use std::{
     net::{TcpStream, ToSocketAddrs},
 };
 
-mod statics;
-
 /// Preforms a GET request on the provided IP, using the arguments provided.
 /// These arguments will be formatted properly and appended to the URL for use
 /// with the API.
@@ -102,11 +100,12 @@ fn to_arg_string(a: Vec<String>) -> String { a.join(",") }
 fn format_request(formatted_api_arguments: String) -> String {
     format!(
         "GET /api/{} HTTP/1.1
-User-Agent: Mozilla/4.0 (compatible; MSIE5.01; Windows NT)
-Host: www.tutorialspoint.com
+User-Agent: rust-gi net (v{})
+Host: gitignore.io
 Accept-Language: en-us
 Accept-Encoding: gzip, deflate
 Connection: Keep-Alive",
+        env!("CARGO_PKG_VERSION"),
         formatted_api_arguments
     )
 }
