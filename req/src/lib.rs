@@ -1,9 +1,8 @@
 extern crate log;
 
-use log::{error, info, trace, warn};
+use log::{error, info, trace};
 use std::{
-    fmt::Display,
-    io::{self, BufWriter, Read, Write},
+    io::{self, Read, Write},
     net::{TcpStream, ToSocketAddrs},
 };
 
@@ -105,8 +104,8 @@ Host: gitignore.io
 Accept-Language: en-us
 Accept-Encoding: gzip, deflate
 Connection: Keep-Alive",
-        env!("CARGO_PKG_VERSION"),
-        formatted_api_arguments
+        formatted_api_arguments,
+        env!("CARGO_PKG_VERSION")
     )
 }
 
@@ -127,13 +126,16 @@ mod req_tests {
     fn test_format_request() {
         assert_eq!(
             format_request("arg1,arg2,arg3".to_string()),
-            "GET /api/arg1,arg2,arg3 HTTP/1.1
-User-Agent: Mozilla/4.0 (compatible; MSIE5.01; Windows NT)
-Host: www.tutorialspoint.com
+            format!(
+                "GET /api/arg1,arg2,arg3 HTTP/1.1
+User-Agent: rust-gi net (v{})
+Host: gitignore.io
 Accept-Language: en-us
 Accept-Encoding: gzip, deflate
-Connection: Keep-Alive"
-                .to_string()
+Connection: Keep-Alive",
+                env!("CARGO_PKG_VERSION") /* This test is not to see if this
+                                           * works */
+            )
         );
     }
 }
