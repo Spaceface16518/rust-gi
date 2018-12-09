@@ -112,6 +112,15 @@ Connection: Keep-Alive",
 #[cfg(test)]
 mod req_tests {
     use super::*;
+    use std::net::SocketAddrV4;
+    use std::net::Ipv4Addr;
+
+    #[test]
+    fn test_get() {
+        let ip: SocketAddrV4 = "93.184.216.34:8080".parse().unwrap();
+        println!("{:?}", get(ip, Vec::new()).unwrap());
+        assert!(true);
+    }
 
     #[test]
     fn test_to_arg_string() {
