@@ -1,9 +1,0 @@
-[package]
-name = "net"
-version = "1.0.1"
-authors = ["Spaceface16518 <33424649+Spaceface16518@users.noreply.github.com>"]
-edition = "2018"
-description = "The networking end of rust-gi. This package aims to decrease dependence on curl (and by extension, libcurl and libc)"
-
-[dependencies]
-log = "0.4"
