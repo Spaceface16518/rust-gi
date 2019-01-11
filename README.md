@@ -7,7 +7,17 @@ Download a pre-built binary for your platform (if one is available) from the [Re
 
 You can also build it from source code. It is preferable to have `rustup` to manage `rustc` version, but this application has been tested and found compatible with `rustc` version(s)
 
- - v1.3.1
+ - 1.31.1
+ - 1.31.0
+ - 1.30.1
+ - 1.30.0
+ - 1.29.2
+ - 1.29.1
+ - 1.29.0
+ - 1.28.0
+ - 1.27.2
+ - 1.27.1
+ - 1.27.0
 
 assuming you are running a unix system.
 
