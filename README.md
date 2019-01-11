@@ -1,5 +1,8 @@
 # rust-gi
-An command line application for generating gitignores, in rust using [hyper.rs](https://hyper.rs/) and [gitignore.io](https://www.gitignore.io/)
+
+[![Build Status](https://travis-ci.com/Spaceface16518/rust-gi.svg?branch=master)](https://travis-ci.com/Spaceface16518/rust-gi)
+
+An command line application for generating gitignores, in written in pure rust using [hyper.rs](https://hyper.rs/) and the  [gitignore.io](https://www.gitignore.io/) API.
 
 ## Installation
 
@@ -19,7 +22,13 @@ You can also build it from source code. It is preferable to have `rustup` to man
  - 1.27.1
  - 1.27.0
 
-assuming you are running a unix system.
+and on these OS's
+
+- Linux
+- Windows
+- OSX
+
+(Warning: These lists may be inaccurate. You can check more accurate lists by going to [this repository's CI page](https://travis-ci.com/Spaceface16518/rust-gi))
 
 You will need [`rustup`](https://rustup.rs/) and [`cargo`](https://doc.rust-lang.org/cargo/getting-started/installation.html#installation) to build this package from source. You can click on their links for installation pages.
 
