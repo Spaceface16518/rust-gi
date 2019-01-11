@@ -8,6 +8,7 @@ use std::{
     io::{self, Write},
 };
 use log::{error, info};
+use std::ops::Deref;
 
 mod uri;
 
@@ -26,7 +27,7 @@ fn main() {
             .and_then(|res| {
                 res.into_body()
                     .for_each(|chunk| {
-                        io::stdout().write_all(&chunk).map_err(|e| {
+                        handler(&chunk).map_err(|e| {
                             panic!("Error writing to stdout, error={}", e)
                         })
                     })
@@ -36,4 +37,9 @@ fn main() {
             })
     }));
     info!("Success");
+}
+
+#[inline]
+fn handler<T: Deref<Target = [u8]>>(bytes: &T) -> io::Result<()> {
+    io::stdout().write_all(bytes)
 }
