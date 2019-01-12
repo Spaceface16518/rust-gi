@@ -4,6 +4,7 @@ use std::ops::Deref;
 
 const PREFIX: &str = "https://www.gitignore.io/api/";
 
+#[deprecated]
 pub fn uri_from(args: Vec<String>) -> Uri {
     trace!("Creating URI from provided arguments");
     args.into_uri()

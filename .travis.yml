@@ -1,15 +1,20 @@
 language: rust
-
 os:
-  - linux
-  - osx
-  - windows
-
+- linux
+- osx
+- windows
 cache: cargo
-
 rust:
-  - stable
-  - beta
-  - nightly
-  - 1.31.1
-  - 1.31.0
+- stable
+- beta
+- nightly
+- 1.31.1
+- 1.31.0
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: hoMYxZc0F8CUBDIA22/r9/I1vHSwt/HE60hgg9KVZB4X7SedjJguCyOrtCIk6dlsD1lsBDHYTnP13u3SPjGTg3+7HM3kVKUrDMn1ORPRmmhgYDkqmAL5rZYlSa9AP54kGyTnkZ1UKcT9ZwFNU2fa7e4K65SYz+kRU4BRzLQ8itNFOV1UECIc8cv+E0IPDU5evd3SZZcmD72TDnR1zpGWzE1LczUYmBF3lmryF93aIlJXzbuRBDtLvivgLAea+e2ynEZx52Qj9u+15UgttNGS+5116Gb22WdDCUSGnwIFZoFH39ZjphkpGbD+AC2bDWXvJ3DIi0mlbUV/9TmjJp/qhKlQAywRsqwf3rtHilfWJrv+TFvF31f1whZx5y9mtkvmpkQRFxyLafNVmsXJjMprT2vL4Y2WXDqYbrWI2a+jE+PJyPOD3w6Xh8obBnQ/PygCrKjcYUfoKzRvhRyNO/50OPjr5VI920G4kkT2R+XKUXcIcEPee4Jrgk7wtrxAyMrnnAXBmgIW+OMRhK67W7GK6nhGiPTXl0FE26dgjt19CNnMrKOi2+U49nkLbqiLIGhMyo9KoLxQZwEXDl2h4R1whKr8m0z173t6xX1cjQzz/qoI3rUyBTFX4AbozGggtEc7X6ppIetSKaE6lTFTfo3E5RJAiyFvYBG12wjHq+y+3rQ=
+  file: target/release/gi
+  on:
+    tags: true

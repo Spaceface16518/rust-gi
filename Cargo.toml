@@ -1,6 +1,6 @@
 [package]
 name = "gi"
-version = "1.4.2"
+version = "1.4.3"
 authors = ["Spaceface16518 <33424649+Spaceface16518@users.noreply.github.com>"]
 description = "A command line tool to generate gitignores."
 edition = "2018"
