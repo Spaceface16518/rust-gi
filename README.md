@@ -8,7 +8,7 @@ An command line application for generating gitignores, in written in pure rust u
 
 Download a pre-built binary for your platform (if one is available) from the [Releases page](https://github.com/Spaceface16518/rust-gi/releases) of this repository.
 
-You can also build it from source code. It is preferable to have `rustup` to manage `rustc` version, but this application has been tested and found compatible with `rustc` version(s)
+You can also build it from source code. You will need Rust to build it, which you can install [here](https://www.rust-lang.org/tools/install). If this build is passing, this application has been tested and found compatible with `rustc` version(s)
 
  - 1.31.1
  - 1.31.0
@@ -30,9 +30,9 @@ and on these OS's
 
 (Warning: These lists may be inaccurate. You can check more accurate lists by going to [this repository's CI page](https://travis-ci.com/Spaceface16518/rust-gi))
 
-You will need [`rustup`](https://rustup.rs/) and [`cargo`](https://doc.rust-lang.org/cargo/getting-started/installation.html#installation) to build this package from source. You can click on their links for installation pages.
+You can download the source code from the [Releases page](https://github.com/Spaceface16518/rust-gi/releases) (or clone the repository)
 
-You can then download the source code from the [Releases page](https://github.com/Spaceface16518/rust-gi/releases). To run, use
+To run `rust-gi`, use
 
 ```shell
 cargo run <PARAMETERS>
@@ -52,4 +52,4 @@ or
 cargo build --release
 ```
 
-You can then copy the executable (named `gi`) to any folder on your `PATH` from the directory `target/[debug|release]/` depending on your build. You can then globally use the `gi` command.
+You can then copy the executable (named `gi`) to any folder on your `PATH` from the directory `target/debug/` or `target/release` depending on your build. You can then globally use the `gi` command (replace `cargo run` with `gi` in the above examples)
