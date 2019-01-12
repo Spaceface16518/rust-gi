@@ -1,4 +1,4 @@
-use self::uri::uri_from;
+use self::uri::IntoUri;
 use hyper::{
     rt::{self, Future, Stream},
     Client,
@@ -17,7 +17,7 @@ fn main() {
     pretty_env_logger::init();
 
     // Get the URI from command line arguments
-    let uri = uri_from(args().skip(1).collect::<Vec<String>>());
+    let uri = args().skip(1).collect::<Vec<String>>().into_uri();
 
     rt::run(rt::lazy(|| {
         // Build a client configured for HTTP connection
