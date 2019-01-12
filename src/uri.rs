@@ -1,18 +1,34 @@
 use hyper::{http::HttpTryFrom, Uri};
 use log::trace;
+use std::ops::Deref;
 
 const PREFIX: &str = "https://www.gitignore.io/api/";
 
 pub fn uri_from(args: Vec<String>) -> Uri {
     trace!("Creating URI from provided arguments");
-    Uri::try_from(format_uri(format_args(args)))
-        .expect("Could not generate URI")
+    args.into_uri()
 }
 
-fn format_args(args: Vec<String>) -> String { args.join(",") }
+#[inline]
+fn format_args<T: Deref<Target = [String]>>(args: T) -> String {
+    args.deref().join(",")
+}
 
+#[inline]
 fn format_uri(formatted: String) -> String {
     format!("{}{}", PREFIX, formatted)
+}
+
+pub trait IntoUri {
+    fn into_uri(self) -> Uri;
+}
+
+impl<T: Deref<Target = [String]>> IntoUri for T {
+    #[inline]
+    fn into_uri(self) -> Uri {
+        Uri::try_from(format_uri(format_args(self)))
+            .expect("Could not generate URI")
+    }
 }
 
 #[cfg(test)]
