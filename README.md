@@ -12,15 +12,6 @@ You can also build it from source code. You will need Rust to build it, which yo
 
  - 1.31.1
  - 1.31.0
- - 1.30.1
- - 1.30.0
- - 1.29.2
- - 1.29.1
- - 1.29.0
- - 1.28.0
- - 1.27.2
- - 1.27.1
- - 1.27.0
 
 and on these OS's
 
