@@ -10,6 +10,7 @@ Download a pre-built binary for your platform (if one is available) from the [Re
 
 You can also build it from source code. You will need Rust to build it, which you can install [here](https://www.rust-lang.org/tools/install). If this build is passing, this application has been tested and found compatible with `rustc` version(s)
 
+ - 1.32.0
  - 1.31.1
  - 1.31.0
 
