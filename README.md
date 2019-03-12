@@ -8,19 +8,7 @@ An command line application for generating gitignores, in written in pure rust u
 
 Download a pre-built binary for your platform (if one is available) from the [Releases page](https://github.com/Spaceface16518/rust-gi/releases) of this repository.
 
-You can also build it from source code. You will need Rust to build it, which you can install [here](https://www.rust-lang.org/tools/install). If this build is passing, this application has been tested and found compatible with `rustc` version(s)
-
- - 1.32.0
- - 1.31.1
- - 1.31.0
-
-and on these OS's
-
-- Linux
-- Windows
-- OSX
-
-(Warning: These lists may be inaccurate. You can check more accurate lists by going to [this repository's CI page](https://travis-ci.com/Spaceface16518/rust-gi))
+You can also build it from source code. You will need Rust to build it, which you can install [here](https://www.rust-lang.org/tools/install). If this build is passing, this application has been tested on the stable, beta, and nightly channels on linux, macos, and windows. Check the badge at the [top of the readme](#rust-gi).
 
 You can download the source code from the [Releases page](https://github.com/Spaceface16518/rust-gi/releases) (or clone the repository)
 
