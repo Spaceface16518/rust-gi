@@ -4,12 +4,6 @@ use std::ops::Deref;
 
 const PREFIX: &str = "https://www.gitignore.io/api/";
 
-#[deprecated]
-pub fn uri_from(args: Vec<String>) -> Uri {
-    trace!("Creating URI from provided arguments");
-    args.into_uri()
-}
-
 #[inline]
 fn format_args<T: Deref<Target = [String]>>(args: T) -> String {
     args.deref().join(",")
@@ -36,8 +30,6 @@ impl<T: Deref<Target = [String]>> IntoUri for T {
 mod uri_tests {
     use super::*;
 
-    use std::str::FromStr;
-
     #[test]
     fn test_format_args() {
         let args = vec!["arg1", "arg2", "arg3"]
@@ -46,21 +38,6 @@ mod uri_tests {
             .collect::<Vec<String>>();
         let formatted = format_args(args);
         assert_eq!(formatted, "arg1,arg2,arg3".to_string());
-    }
-
-    #[test]
-    fn test_uri_from() {
-        let uri = uri_from(
-            vec!["arg1", "arg2", "arg3"]
-                .into_iter()
-                .map(String::from)
-                .collect::<Vec<String>>(),
-        );
-        assert_eq!(
-            uri,
-            Uri::from_str("https://www.gitignore.io/api/arg1,arg2,arg3")
-                .unwrap()
-        );
     }
 
     #[test]
