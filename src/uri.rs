@@ -1,5 +1,3 @@
-use hyper::{http::HttpTryFrom, Uri};
-use log::trace;
 use std::ops::Deref;
 
 const PREFIX: &str = "https://www.gitignore.io/api/";
@@ -15,14 +13,13 @@ fn format_uri(formatted: String) -> String {
 }
 
 pub trait IntoUri {
-    fn into_uri(self) -> Uri;
+    fn into_uri(self) -> String;
 }
 
 impl<T: Deref<Target = [String]>> IntoUri for T {
     #[inline]
-    fn into_uri(self) -> Uri {
-        Uri::try_from(format_uri(format_args(self)))
-            .expect("Could not generate URI")
+    fn into_uri(self) -> String {
+        format_uri(format_args(self))
     }
 }
 
