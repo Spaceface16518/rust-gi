@@ -18,9 +18,7 @@ pub trait IntoUri {
 
 impl<T: Deref<Target = [String]>> IntoUri for T {
     #[inline]
-    fn into_uri(self) -> String {
-        format_uri(format_args(self))
-    }
+    fn into_uri(self) -> String { format_uri(format_args(self)) }
 }
 
 #[cfg(test)]
