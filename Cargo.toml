@@ -10,6 +10,7 @@ log = "0.4.6"
 pretty_env_logger = "0.3.0"
 reqwest = "0.9.11"
 num-traits = "0.2.10"
+cachedir = "0.1.1"
 
 [profile.release]
 codegen-units = 1
