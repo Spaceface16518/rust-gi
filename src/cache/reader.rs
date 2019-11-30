@@ -64,7 +64,7 @@ impl<P: AsRef<Path>> Read for CacheItemReader<P> {
         match &mut self.0 {
             LazyCacheItemHandle::Open(file) => file.read(buf),
             LazyCacheItemHandle::Lazy(ref p) => {
-                let mut file = File::open(p)?;
+                let file = File::open(p)?;
                 self.0 = LazyCacheItemHandle::Open(file);
                 self.0.file_mut().unwrap().read(buf)
             },

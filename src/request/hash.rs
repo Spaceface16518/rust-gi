@@ -1,6 +1,6 @@
 use num_traits::WrappingMul;
 use std::{
-    ops::{BitOr, BitXor},
+    ops::{BitXor},
     str::FromStr,
 };
 
