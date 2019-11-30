@@ -1,9 +1,9 @@
-use crate::request::hash::RequestHash;
 use hash::FNV1aHash;
 use std::iter::Sum;
 
 mod hash;
 
+#[derive(Debug, Default, PartialEq, Clone)]
 pub struct Request<'a> {
     parameters: &'a [String],
 }
@@ -25,12 +25,12 @@ impl Request<'_> {
     ///
     /// Because the hashes are summed, **the order of the parameters doesn't
     /// matter**.
-    pub fn hash_parameters<T: FNV1aHash + Sum>(&self) -> RequestHash<T> {
+    pub fn hash_parameters(&self) -> u64 {
         self.parameters
             .iter()
-            .map(|s| T::hash(s.as_bytes().iter()))
-            .sum::<T>()
-            .into()
+            .map(|s| u32::hash(s.as_bytes().iter()))
+            .map(|i| i as u64)
+            .sum::<u64>()
     }
 }
 

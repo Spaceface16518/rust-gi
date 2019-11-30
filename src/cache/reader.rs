@@ -36,7 +36,7 @@ impl<'a> CacheReader<'a> {
 
     fn try_get_item_path(&self, hash: u64) -> Result<PathBuf, io::Error> {
         if self.cache_root.exists() {
-            let item_relative_path = hash_to_path(hash);
+            let item_relative_path = hash_to_path(hash).join(".gitignore");
             let item_path =
                 self.cache_root.to_path_buf().join(item_relative_path);
 

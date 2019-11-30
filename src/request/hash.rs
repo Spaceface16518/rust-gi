@@ -1,29 +1,5 @@
 use num_traits::WrappingMul;
-use std::{
-    ops::{BitXor},
-    str::FromStr,
-};
-
-/// An opaque type representing the hash of a `Request`'s parameters.
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-#[repr(transparent)]
-pub struct RequestHash<T = u64>(T);
-
-impl<T> RequestHash<T> {
-    const fn new(n: T) -> Self { RequestHash(n) }
-}
-
-impl<T> From<T> for RequestHash<T> {
-    fn from(n: T) -> Self { RequestHash::new(n) }
-}
-
-impl<T: FromStr> FromStr for RequestHash<T> {
-    type Err = <T as FromStr>::Err;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        T::from_str(s).map(RequestHash::new)
-    }
-}
+use std::{ops::BitXor, str::FromStr};
 
 pub trait FNV1aHash:
     From<u8> + WrappingMul + BitXor<Self, Output = Self>

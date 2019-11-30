@@ -7,6 +7,7 @@ pub fn hash_to_path(hash: u64) -> PathBuf {
         .into_iter()
         .map(|shift| shift * 8)
         .map(|shift| hash >> shift & 0xFF)
+        .filter(|&chunk| chunk != 0)
         .map(|chunk| format!("{:x}", chunk))
         .rev()
         .collect()
