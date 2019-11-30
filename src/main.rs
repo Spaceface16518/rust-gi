@@ -1,9 +1,9 @@
-use self::uri::IntoUri;
+
 use crate::{
     cache::{reader::CacheReader, writer::CacheWriter},
     request::Request,
 };
-use reqwest::get;
+
 use std::{
     env::args,
     error::Error,
@@ -31,7 +31,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .user_cache(true)
         .get_cache_dir()?
         .to_path_buf();
-    let mut cache_reader = CacheReader::new(&cache_root);
+    let cache_reader = CacheReader::new(&cache_root);
     if let Ok(ref mut item_reader) =
         cache_reader.try_read_item_strict(param_hash)
     {

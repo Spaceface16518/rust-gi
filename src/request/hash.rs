@@ -1,5 +1,5 @@
 use num_traits::WrappingMul;
-use std::{ops::BitXor, str::FromStr};
+use std::{ops::BitXor};
 
 pub trait FNV1aHash:
     From<u8> + WrappingMul + BitXor<Self, Output = Self>
