@@ -2,6 +2,8 @@ use self::uri::IntoUri;
 use reqwest::get;
 use std::env::args;
 
+mod cache;
+mod request;
 mod uri;
 
 fn main() {
